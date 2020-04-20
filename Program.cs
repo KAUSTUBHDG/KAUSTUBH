@@ -1,56 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace ConsoleApp2
+namespace ConsoleApp1
 {
-    class Stack
+    class Post
     {
-        private readonly List<Object> list=new List<object>();
+        public string Title { get; set; }
+        public string Description { get; set; }
+        private DateTime DateTime { get; set; }
+        private int upvote=0;
+        private int downvote=0;
 
-       
-        public void Push(Object obj )
+        public void Upvote()
         {
-            if (obj==null)
-            {
-                throw new InvalidOperationException("Invalid input");
-            }
-            list.Add(obj);
-
+            upvote = upvote + 1;
         }
 
-        public object Pop()
+        public void Downvote()
         {
-            if (list.Count == 0)
-                throw new InvalidOperationException("Cant pop from empty list");
-
-            list.RemoveAt(list.Count - 1);
-
-            return (list);
+            downvote = downvote + 1;
         }
 
-      
-
-        public void Clear()
+        public void TotalVote()
         {
-            list.Clear();
-            
+            Console.WriteLine("Upvotes are:"+upvote+"Downvotes are:"+downvote);
         }
+        
     }
     class Program
     {
         static void Main(string[] args)
         {
-            var stack = new Stack();
-            stack.Push(1);
-            Console.WriteLine(stack);
-            Console.ReadLine();
-            stack.Push(2);
-            stack.Push(3);
+            var post = new Post();
+            post.Title = "Richest Person";
+            post.Description = "Person having most money in "+DateTime.Now;
 
-            Console.WriteLine(stack);
-            Console.ReadLine();
-            Console.WriteLine(stack.Pop());
-            Console.ReadLine();
+            while(true)
+            {
+              //  int upvote = 0;
+              //  int downvote = 0;
+                Console.WriteLine("Enter 1 to upvote or 0 to downvote for the post to exit press -1");
+                var vote =Convert.ToInt32( Console.ReadLine());
+                if (vote == 1)
+                {
+                    post.Upvote();
+                }
+                else if(vote == 0)
+                {
+                    post.Downvote();
+                }
+                else
+                {
+                    post.TotalVote();
+                    break;
+                }
+                    
+
+            }
+
+           
         }
     }
 }
