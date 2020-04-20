@@ -1,120 +1,56 @@
-﻿    using System;
-using System.Data.Common;
-using System.Threading;
+﻿using System;
+using System.Collections.Generic;
 
-namespace ConsoleApp3
+namespace ConsoleApp2
+{
+    class Stack
     {
-        public abstract class DbConnection
-        {
-            private string ConnectionString { get; set; }
-            private TimeSpan TimeOut { get; set; }
+        private readonly List<Object> list=new List<object>();
 
-            public DbConnection(string connectionString)
+       
+        public void Push(Object obj )
+        {
+            if (obj==null)
             {
-                var timeout = TimeOut;
-                ConnectionString = connectionString;
-            if (String.IsNullOrEmpty(connection))
-                {
-                    Console.WriteLine("Cannot pass an empty string!!!");
-                }
-
+                throw new InvalidOperationException("Invalid input");
             }
+            list.Add(obj);
 
-        public TimeSpan Time(int time)
-        {
-            time = TimeOut;
-            Thread.Sleep(time);
         }
 
-        public abstract void Opening();
-        public abstract void Closing();
-          
+        public object Pop()
+        {
+            if (list.Count == 0)
+                throw new InvalidOperationException("Cant pop from empty list");
+
+            list.RemoveAt(list.Count - 1);
+
+            return (list);
         }
 
-    public class SqlConnection : DbConnection
-    {
-        private readonly string connectionString;
+      
 
-        public SqlConnection(string connectionString) : base(connectionString)
+        public void Clear()
         {
-          
-        }
-
-
-        public override void Closing()
-        {
-            Console.WriteLine("Closing SQL connection");  
-        }
-
-        public override void Opening()
-        {
-            Console.WriteLine("Opening SQL connection");
+            list.Clear();
+            
         }
     }
-
-    public class  OracleConnection:DbConnection
-    {
-        public OracleConnection(string connectionString):base(connectionString)
-        {
-
-        }
-        public override void Closing()
-        {
-            Console.WriteLine("Closing Oracle connection");
-        }
-
-        public override void Opening()
-        {
-            Console.WriteLine("Opening Oracle connection");
-        }
-    }    
-
-
-    class DbCommand
-    {
-        private DbConnection _dbConnection { get; set; }
-        private string _command { get; set; }
-        private DbConnection _time { get; set; }
-
-        public DbCommand(DbConnection dbConnection,string command,DbConnection Timeout)
-        {
-            _dbConnection = dbConnection;
-            _command = command;
-            _time = Timeout;
-        }
-
- 
-        public void Execute()
-        {
-            _dbConnection.Opening();
-            _time.Time(100);
-            _dbConnection.Closing();
-            _time.Time(100);
-        }
-    }
-
     class Program
     {
-       static void Main(string[] args)
-       {
-            Console.WriteLine("Tyep SQL or ORACLE to connect to.");
-            var input = Console.ReadLine().ToLower();
+        static void Main(string[] args)
+        {
+            var stack = new Stack();
+            stack.Push(1);
+            Console.WriteLine(stack);
+            Console.ReadLine();
+            stack.Push(2);
+            stack.Push(3);
 
-            if (!string.IsNullOrEmpty(input) && input == "sql")
-            {
-                var sqlConnection = new SqlConnection(input);
-                var dbCommand = new DbCommand(sqlConnection, sqlConnection.ConnectionString);
-                dbCommand.Execute();
-            }
-            else if (!string.IsNullOrEmpty(input) && input == "oracle")
-            {
-                var oracleConnection = new OracleConnection(input);
-                var dbCommand = new DbCommand(oracleConnection, oracleConnection.ConnectionString);
-                dbCommand.Execute();
-            }
-            else
-            {
-                throw new ArgumentException("Not a valid entry.");
-            }
+            Console.WriteLine(stack);
+            Console.ReadLine();
+            Console.WriteLine(stack.Pop());
+            Console.ReadLine();
+        }
     }
 }
